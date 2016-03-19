@@ -1,0 +1,8 @@
+CREATE TABLE address
+(
+	Id int NOT NULL AUTO_INCREMENT,
+	Title varchar(225) NOT NULL,
+	Content text NOT NULL,
+	Path text NOT NULL,
+	PRIMARY KEY(Id)
+);
