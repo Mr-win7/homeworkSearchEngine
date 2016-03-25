@@ -1,0 +1,7 @@
+CREATE DATABASE data;
+CREATE TABLE url
+(
+	title varchar(255),
+	content longtext,
+	path text
+);

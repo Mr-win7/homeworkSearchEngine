@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="UrlMapper">
-	<cache-ref namespace="UrlMapper" ></cache-ref>
+<mapper namespace="demo.UrlMapper">
+	<cache-ref namespace="demo.UrlMapper" ></cache-ref>
 	<select id="selectUrlByContent" resultMap="urlDefaultMap" flushCache="true"
 		parameterType="Para">
 		SELECT * FROM url
@@ -11,7 +11,7 @@
 		;
 	</select>
 	<select id="selectUrlByTitle" flushCache="true" resultMap="urlDefaultMap"
-		parameterType="Para">SELECT * FROM url <where><if test="search!=null">
+		parameterType="Para">SELECT * FROM url<where><if test="search!=null">
 			<bind name="pattern" value="'%'+search+'%'" />title LIKE #{pattern}</if>;</where></select>
 	<select id="selectPathAll" statementType="PREPARED" resultType="java.lang.String">SELECT path FROM url;</select>
 	<insert id="insertUrl" flushCache="true" useGeneratedKeys="false"

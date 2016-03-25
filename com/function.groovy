@@ -203,18 +203,24 @@ def getTitle_1(content)
 
 
 
-	def Url(path)
+	def Url(String path)
 	{
 		this.path=path
 	}	
-	def title
-	def path
-	def content
+	String title
+	String path
+	String content
 }
 	def i=1
 	def urlList=["http://www.sina.com.cn"]
 	def queue= [new Url("http://www.sina.com.cn")]
-	while(!queue.isEmpty())
+	def resource="mybatis-config.xml"
+	def inputStream=Resources.getResourceAsStream(resource)
+	def sqlSessionFactory=new SqlSessionFactoryBuilder().build(inputStream)
+	def session=sqlSessionFactory.openSession()
+	def mapper=session.getMapper(UrlMapper.class)
+
+	while((!queue.isEmpty())&&i<100000)
 	{
 		println(queue[0].getPath())
 		println(i)
@@ -222,6 +228,8 @@ def getTitle_1(content)
 		try{
 		queue[0].content=queue[0].getContent_1(queue[0].path)
 		queue[0].title=queue[0].getTitle_1(queue[0].content)[0][2].replace("\n","")
+		mapper.insertUrl(queue[0])
+                session.commit()
 		println(queue[0].title)
 		}catch(e){
 		e.printStackTrace()
@@ -229,14 +237,6 @@ def getTitle_1(content)
 		queue.remove(0)
 		continue
 		}
-		resource="mybatis-config.xml"
-		inputStream=Resources.getResourceAsStream(resource)
-		sqlSessionFactory=new SqlSessionFactoryBuilder().build(inputStream)
-		session=sqlSessionFactory.openSession()
-		mapper=session.getMapper(UrlMapper.class)
-		test=mapper.selectPathAll()
-		println(test)
-		for(;;);
 		def matcher_1=queue[0].getChilds(queue[0].getContent())
 		for(ma in matcher_1)
 		{
@@ -244,11 +244,8 @@ def getTitle_1(content)
 			def str=ma[1].replace(" ","").replace("\n","")
 			if(!urlList.contains(str))
 			{
-//				println(str)
 				queue.add(new Url(str))
 				urlList.add(str)
-//				println(i)
-//				i++
 			}
 		}
 		queue.remove(0)
@@ -256,7 +253,12 @@ def getTitle_1(content)
 
 interface UrlMapper
 {
-	def insertUrl(url)
+	void insertUrl(url)
 	List<String> selectPathAll()
-	Url selectUrl(search,pattern)
+	Url selectUrlByTitle(pa)
+	Url selectUrlByContent(pa)
+}
+class Para
+{
+	def search
 }
